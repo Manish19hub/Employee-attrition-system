@@ -1,0 +1,26 @@
+services:
+  # The FastAPI Backend
+  - type: web
+    name: employee-system-api
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+
+  # The React/Vite Frontend
+  - type: web
+    name: employee-system-frontend
+    env: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      # Automatically syncs the API domain dynamically from the connected backend service
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: employee-system-api
+          property: host

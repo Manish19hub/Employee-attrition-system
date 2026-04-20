@@ -39,7 +39,11 @@ function App() {
 
     try {
       // Getting API URL from environment variables, fallback for local dev
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      // Render injects `host` as `domain.onrender.com` without protocol, ensuring we add one:
+      if (API_URL && !API_URL.startsWith('http')) {
+        API_URL = `https://${API_URL}`;
+      }
       
       const res = await fetch(`${API_URL}/predict`, {
         method: 'POST',
