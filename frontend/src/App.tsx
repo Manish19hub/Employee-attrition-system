@@ -38,8 +38,10 @@ function App() {
     };
 
     try {
-      // Pointing to our FastAPI backend
-      const res = await fetch('http://localhost:8000/predict', {
+      // Getting API URL from environment variables, fallback for local dev
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      
+      const res = await fetch(`${API_URL}/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
